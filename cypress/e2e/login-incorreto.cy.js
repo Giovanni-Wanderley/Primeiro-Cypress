@@ -1,4 +1,4 @@
-describe("Página de login", () => {
+describe("Página de Login", () => {
   beforeEach(() => {
     cy.visit("https://adopet-frontend-cypress.vercel.app/");
     cy.get('[data-test="login-button"]').click();

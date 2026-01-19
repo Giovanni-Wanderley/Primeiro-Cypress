@@ -1,15 +1,16 @@
 describe("Página de Login", () => {
   beforeEach(() => {
     cy.visit("https://adopet-frontend-cypress.vercel.app/");
-    cy.contains("a", "Fazer login").click();
+    cy.get('[data-test="login-button"]').click();
   });
 
   it("Deve preencher os campos do formulário corretamente para fazer login", () => {
     cy.fixture("usuario").then((dados) => {
-      cy.get('input[name="email"]').type(dados.email);
-      cy.get('input[name="password"]').type("Senha123");
-      cy.contains("button", "Entrar").click();
+      cy.get('[data-test="input-loginEmail"]').type(dados.email);
+      cy.get('[data-test="input-loginPassword"]').type("Senha123");
+      cy.get('[data-test="submit-button"]').click();
       cy.url().should("include", "/home");
+      cy.contains("p", "Olá!").should("be.visible");
     });
   });
 });
