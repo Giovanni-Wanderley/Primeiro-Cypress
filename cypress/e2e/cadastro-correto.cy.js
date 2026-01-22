@@ -12,5 +12,6 @@ describe("Página de Cadastro", () => {
     cy.get('[data-test="input-confirm-password"]').type("Senha123");
     cy.writeFile("cypress/fixtures/usuario.json", { email: emailDinamico });
     cy.get('[data-test="submit-button"]').click();
+    cy.url().should("include", "/login");
   });
 });

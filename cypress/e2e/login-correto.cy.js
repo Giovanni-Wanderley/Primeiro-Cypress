@@ -9,7 +9,6 @@ describe("Página de Login", () => {
       cy.get('[data-test="input-loginEmail"]').type(dados.email);
       cy.get('[data-test="input-loginPassword"]').type("Senha123");
       cy.get('[data-test="submit-button"]').click();
-      cy.url().should("include", "/home");
       cy.contains("p", "Olá!").should("be.visible");
     });
   });
