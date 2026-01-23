@@ -1,6 +1,7 @@
 const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
+  projectId: "hooinj",
   e2e: {
     retries: {
       runMode: 2,
