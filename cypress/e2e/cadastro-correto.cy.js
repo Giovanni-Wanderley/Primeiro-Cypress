@@ -11,6 +11,7 @@ describe("Página de Cadastro", () => {
 
     cy.writeFile("cypress/fixtures/usuario.json", { email: emailDinamico });
     cy.cadastrar("Giovanni Wanderley", emailDinamico, senhaPadrao);
+    cy.contains("p", "Já tem conta? Faça seu login:").should("be.visible");
     cy.url().should("include", "/login");
   });
 });
