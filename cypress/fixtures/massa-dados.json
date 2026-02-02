@@ -1,0 +1,20 @@
+{
+  "cadastro": {
+    "nomes": ["Ana Silva", "Bruno Oliveira", "Carla Souza"],
+    "senha": "Senha123",
+    "emailBase": "qa.teste"
+  },
+  "loginValido": {
+    "email": "giovanni_oficial@teste.com",
+    "senha": "Senha123"
+  },
+  "loginIncorreto": {
+    "email": "email_que_nao_existe@teste.com",
+    "senha": "senhaErrada123",
+    "msgErro": "Falha no login. Verifique suas credenciais."
+  },
+  "cadastroIncorreto": {
+    "emailInvalido": "giovanni@sem-ponto-com",
+    "msgErroEmail": "Por favor, insira um e-mail válido"
+  }
+}
