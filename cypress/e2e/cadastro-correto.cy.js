@@ -14,6 +14,7 @@ describe("Página de Cadastro", () => {
       cy.writeFile("cypress/fixtures/usuario.json", {
         email: emailDinamico,
         nome: nomeAleatorio,
+        senha: massa.cadastro.senha,
       });
       cy.cadastrar(nomeAleatorio, emailDinamico, massa.cadastro.senha);
       cy.contains("p", "Já tem conta? Faça seu login:").should("be.visible");
