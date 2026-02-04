@@ -5,8 +5,8 @@ describe("Página de Login", () => {
   });
 
   it("Deve preencher os campos do formulário corretamente para fazer login", () => {
-    cy.fixture("usuario").then((dados) => {
-      cy.login(dados.email, "Senha123");
+    cy.fixture("usuario").then((usuario) => {
+      cy.login(usuario.email, usuario.senha);
       cy.contains("p", "Olá!").should("be.visible");
     });
   });
