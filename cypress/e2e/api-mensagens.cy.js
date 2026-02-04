@@ -9,13 +9,16 @@ describe("Api Adopet", () => {
       body: { email, senha }
     }).then((resLogin) => {
       const token = resLogin.body.token;
-      
+      const userId = resLogin.body.id; 
+
       cy.request({
         method: "GET",
-        url: "https://adopet-api-i8qu.onrender.com/mensagem/f8208fb4-d426-4ed3-88b3-941a12b3deb4",
+        url: `https://adopet-api-i8qu.onrender.com/mensagem/${userId}`, 
         headers: { Authorization: `Bearer ${token}` },
       }).then((res) => {
         expect(res.status).to.eq(200);
+        expect(res.body).is.not.empty;
+        expect(res.body).to.have.property("msg");
       });
     });
   });
