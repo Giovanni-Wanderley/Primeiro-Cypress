@@ -14,7 +14,7 @@
     "msgErro": "Falha no login. Verifique suas credenciais."
   },
   "cadastroIncorreto": {
-    "emailInvalido": "giovanni@sem-ponto-com",
+    "emailInvalido": "giovanni@teste",
     "msgErroEmail": "Por favor, insira um e-mail válido"
   }
 }

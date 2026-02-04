@@ -16,8 +16,8 @@ describe("Página de Cadastro", () => {
         nome: nomeAleatorio,
       });
       cy.cadastrar(nomeAleatorio, emailDinamico, massa.cadastro.senha);
-      cy.url().should("include", "/login");
       cy.contains("p", "Já tem conta? Faça seu login:").should("be.visible");
+      cy.url().should("include", "/login");
     });
   });
 });
