@@ -1,9 +1,51 @@
-- name: Instalação e Execução dos Testes
+name: CI — Cypress Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
           browser: chrome
-          record: true 
+          record: false
         env:
+          # token para o seu teste (mapeado para Cypress.env('API_TOKEN'))
+          CYPRESS_API_TOKEN: ${{ secrets.CYPRESS_API_TOKEN }}
+          # variáveis do seu projeto (se usadas pelos testes)
+          ADOPET_EMAIL: ${{ secrets.ADOPET_EMAIL }}
+          ADOPET_SENHA: ${{ secrets.ADOPET_SENHA }}
+          # opcional: se quiser usar o Cypress Dashboard, adicione o secret CYPRESS_RECORD_KEY
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          CYPRESS_email: ${{ secrets.ADOPET_EMAIL }}
-          CYPRESS_senha: ${{ secrets.ADOPET_SENHA }}
+
+      - name: Upload mochawesome reports (artifacts)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mochawesome-reports
+          path: cypress/results
