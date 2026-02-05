@@ -49,5 +49,4 @@ jobs:
         with:
           name: mochawesome-reports
           path: cypress/results
-
-`r`n          if-no-files-found: warn
+          if-no-files-found: warn
