@@ -5,6 +5,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   cypress-run:
@@ -35,10 +36,8 @@ jobs:
           browser: chrome
           record: false
         env:
-          # variáveis do seu projeto (se usadas pelos testes)
           CYPRESS_ADOPET_EMAIL: ${{ secrets.ADOPET_EMAIL }}
           CYPRESS_ADOPET_SENHA: ${{ secrets.ADOPET_SENHA }}
-          # opcional: se quiser usar o Cypress Dashboard, adicione o secret CYPRESS_RECORD_KEY
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
 
       - name: Upload mochawesome reports (artifacts)
@@ -48,4 +47,3 @@ jobs:
           name: mochawesome-reports
           path: cypress/results
           if-no-files-found: warn
-
