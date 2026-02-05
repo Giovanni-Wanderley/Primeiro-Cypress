@@ -12,8 +12,15 @@ describe("Api Adopet - login via UI e uso do token", () => {
   it("faz login pela UI, extrai token e chama a API", () => {
     cy.visit("https://adopet-frontend-cypress.vercel.app/");
     cy.get('[data-test="login-button"]').click();
+    cy.intercept(
+      "POST",
+      "https://adopet-api-i8qu.onrender.com/adotante/login"
+    ).as("login");
     cy.login(email, senha);
-    cy.contains("p", "Olá!", { timeout: 10000 }).should("be.visible");
+    cy.wait("@login", { timeout: 20000 }).then((interception) => {
+      expect(interception?.response?.statusCode, "status do login").to.eq(200);
+    });
+
     cy.window().then((win) => {
       const ls = win.localStorage;
       let token = null;
@@ -52,9 +59,9 @@ describe("Api Adopet - login via UI e uso do token", () => {
         }
       }
 
-      expect(token, "JWT encontrado em localStorage ou cookies").to.be.a(
-        "string",
-      ).and.not.be.empty;
+      expect(token, "JWT encontrado em localStorage ou cookies")
+        .to.be.a("string")
+        .and.not.be.empty;
 
       const authorization = `Bearer ${token}`;
       cy.request({
