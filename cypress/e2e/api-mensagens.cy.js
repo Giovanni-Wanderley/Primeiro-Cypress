@@ -27,7 +27,7 @@ describe("Api Adopet - login via API e uso do token", () => {
         .request({
           method: "POST",
           url: loginUrl,
-          body: { email, senha },
+          body: { email, password: senha },
           failOnStatusCode: false,
           timeout: 20000,
         })
