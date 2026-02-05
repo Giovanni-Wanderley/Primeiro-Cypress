@@ -34,7 +34,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           browser: chrome
-          record: false
+          record: true
         env:
           CYPRESS_ADOPET_EMAIL: ${{ secrets.ADOPET_EMAIL }}
           CYPRESS_ADOPET_SENHA: ${{ secrets.ADOPET_SENHA }}
