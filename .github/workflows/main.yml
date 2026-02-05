@@ -35,8 +35,6 @@ jobs:
           browser: chrome
           record: false
         env:
-          # token para o seu teste (mapeado para Cypress.env('API_TOKEN'))
-          CYPRESS_API_TOKEN: ${{ secrets.CYPRESS_API_TOKEN }}
           # variáveis do seu projeto (se usadas pelos testes)
           CYPRESS_ADOPET_EMAIL: ${{ secrets.ADOPET_EMAIL }}
           CYPRESS_ADOPET_SENHA: ${{ secrets.ADOPET_SENHA }}
@@ -49,5 +47,5 @@ jobs:
         with:
           name: mochawesome-reports
           path: cypress/results
+          if-no-files-found: warn
 
-`r`n          if-no-files-found: warn
