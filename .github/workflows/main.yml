@@ -10,6 +10,10 @@ on:
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
+    env:
+      CYPRESS_ADOPET_EMAIL: ${{ secrets.ADOPET_EMAIL }}
+      CYPRESS_ADOPET_SENHA: ${{ secrets.ADOPET_SENHA }}
+      CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -24,26 +28,19 @@ jobs:
         run: npm ci
 
       - name: Run Cypress tests
-        if: ${{ secrets.CYPRESS_RECORD_KEY == '' }}
+        if: ${{ env.CYPRESS_RECORD_KEY == '' }}
         uses: cypress-io/github-action@v6
         with:
           install: false
           browser: chrome
-        env:
-          CYPRESS_ADOPET_EMAIL: ${{ secrets.ADOPET_EMAIL }}
-          CYPRESS_ADOPET_SENHA: ${{ secrets.ADOPET_SENHA }}
 
       - name: Run Cypress tests with Cloud recording
-        if: ${{ secrets.CYPRESS_RECORD_KEY != '' }}
+        if: ${{ env.CYPRESS_RECORD_KEY != '' }}
         uses: cypress-io/github-action@v6
         with:
           install: false
           browser: chrome
           record: true
-        env:
-          CYPRESS_ADOPET_EMAIL: ${{ secrets.ADOPET_EMAIL }}
-          CYPRESS_ADOPET_SENHA: ${{ secrets.ADOPET_SENHA }}
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
 
       - name: Upload mochawesome reports (artifacts)
         if: always()
