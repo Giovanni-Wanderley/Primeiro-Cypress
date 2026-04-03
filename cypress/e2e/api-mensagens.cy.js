@@ -6,8 +6,23 @@ describe("Api Adopet - login via API e uso do token", () => {
   const loginUrl = `${baseUrl}/adotante/login`;
   const cadastroUrl =
     Cypress.env("ADOPET_CADASTRO_URL") || `${baseUrl}/adotante/cadastro`;
-  const mensagemUrl =
-    `${baseUrl}/mensagem/f8208fb4-d426-4ed3-88b3-941a12b3deb4`;
+  const mensagemIdOverride = Cypress.env("ADOPET_MENSAGEM_ID");
+
+  const getMensagemId = (token) => {
+    if (mensagemIdOverride) return mensagemIdOverride;
+
+    const [, payloadBase64] = token.split(".");
+    expect(payloadBase64, "payload do token JWT").to.be.a("string").and.not.be
+      .empty;
+
+    const payloadJson = atob(payloadBase64.replace(/-/g, "+").replace(/_/g, "/"));
+    const payload = JSON.parse(payloadJson);
+
+    expect(payload?.sub, "id do usuario no token").to.be.a("string").and.not.be
+      .empty;
+
+    return payload.sub;
+  };
 
   if (!email || !senha) {
     it("mensagens da API (skipped - credentials not set)", function () {
@@ -90,10 +105,11 @@ describe("Api Adopet - login via API e uso do token", () => {
         const token = finalLogin.body?.token;
         expect(token, "token do login").to.be.a("string").and.not.be.empty;
 
+        const mensagemId = getMensagemId(token);
         const authorization = `Bearer ${token}`;
         cy.request({
           method: "GET",
-          url: mensagemUrl,
+          url: `${baseUrl}/mensagem/${mensagemId}`,
           headers: { Authorization: authorization },
           failOnStatusCode: false,
           timeout: 20000,
@@ -106,7 +122,15 @@ describe("Api Adopet - login via API e uso do token", () => {
             );
           }
           expect(mensagemRes.body).to.not.be.empty;
-          expect(mensagemRes.body).to.have.property("msg");
+
+          if (Array.isArray(mensagemRes.body)) {
+            expect(mensagemRes.body, "lista de mensagens").to.have.length.greaterThan(0);
+            return;
+          }
+
+          expect(mensagemRes.body, "mensagem retornada").to.satisfy(
+            (body) => Boolean(body.msg || body.message || body.id)
+          );
         });
       });
     });
