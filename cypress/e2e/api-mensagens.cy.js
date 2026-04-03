@@ -32,6 +32,11 @@ describe("Api Adopet - login via API e uso do token", () => {
   }
 
   it("faz login via API, extrai token e chama a API", () => {
+    const hasToken = (res) =>
+      [200, 201].includes(res.status) &&
+      typeof res.body?.token === "string" &&
+      res.body.token.length > 0;
+
     const warmup = () =>
       cy.request({
         method: "GET",
@@ -50,7 +55,7 @@ describe("Api Adopet - login via API e uso do token", () => {
           timeout: 20000,
         })
         .then((res) => {
-          if (res.status === 200 || tentativas <= 0) return res;
+          if (hasToken(res) || tentativas <= 0) return res;
           cy.wait(5000);
           return login(tentativas - 1);
         });
@@ -94,7 +99,7 @@ describe("Api Adopet - login via API e uso do token", () => {
           });
         }
 
-        if (res.status !== 200) {
+        if (!hasToken(res)) {
           throw new Error(
             `Login API falhou: status ${res.status} - ${JSON.stringify(res.body)}`
           );
@@ -102,7 +107,7 @@ describe("Api Adopet - login via API e uso do token", () => {
 
         return res;
       }).then((finalLogin) => {
-        if (finalLogin.status !== 200) {
+        if (!hasToken(finalLogin)) {
           throw new Error(
             `Login API falhou apos cadastro: status ${finalLogin.status} - ${JSON.stringify(
               finalLogin.body
