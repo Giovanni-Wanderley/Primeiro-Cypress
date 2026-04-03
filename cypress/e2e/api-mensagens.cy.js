@@ -5,7 +5,7 @@ describe("Api Adopet - login via API e uso do token", () => {
   const baseUrl = "https://adopet-api-i8qu.onrender.com";
   const loginUrl = `${baseUrl}/adotante/login`;
   const cadastroUrl =
-    Cypress.env("ADOPET_CADASTRO_URL") || `${baseUrl}/adotante/cadastro`;
+    Cypress.env("ADOPET_CADASTRO_URL") || `${baseUrl}/adotante/register`;
   const mensagemIdOverride = Cypress.env("ADOPET_MENSAGEM_ID");
 
   const getMensagemId = (token) => {
@@ -55,10 +55,10 @@ describe("Api Adopet - login via API e uso do token", () => {
           return login(tentativas - 1);
         });
 
-    const cadastrar = () =>
+    const cadastrar = (url) =>
       cy.request({
         method: "POST",
-        url: cadastroUrl,
+        url,
         body: { nome, email, password: senha },
         failOnStatusCode: false,
         timeout: 20000,
@@ -72,7 +72,15 @@ describe("Api Adopet - login via API e uso do token", () => {
           res.body.message.toLowerCase().includes("email");
 
         if (notFoundEmail) {
-          return cadastrar().then((cadRes) => {
+          return cadastrar(cadastroUrl).then((cadRes) => {
+            const endpointNaoEncontrado = cadRes.status === 404;
+
+            if (endpointNaoEncontrado && cadastroUrl.endsWith("/register")) {
+              return cadastrar(`${baseUrl}/adotante/cadastro`);
+            }
+
+            return cadRes;
+          }).then((cadRes) => {
             const okStatus = cadRes.status === 200 || cadRes.status === 201;
             const conflict = cadRes.status === 409;
             if (!okStatus && !conflict) {
