@@ -18,21 +18,26 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-
-      - name: Cache node modules
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          cache: npm
 
       - name: Install dependencies
         run: npm ci
 
       - name: Run Cypress tests
+        if: ${{ secrets.CYPRESS_RECORD_KEY == '' }}
         uses: cypress-io/github-action@v6
         with:
+          install: false
+          browser: chrome
+        env:
+          CYPRESS_ADOPET_EMAIL: ${{ secrets.ADOPET_EMAIL }}
+          CYPRESS_ADOPET_SENHA: ${{ secrets.ADOPET_SENHA }}
+
+      - name: Run Cypress tests with Cloud recording
+        if: ${{ secrets.CYPRESS_RECORD_KEY != '' }}
+        uses: cypress-io/github-action@v6
+        with:
+          install: false
           browser: chrome
           record: true
         env:
@@ -47,3 +52,13 @@ jobs:
           name: mochawesome-reports
           path: cypress/results
           if-no-files-found: warn
+
+      - name: Upload Cypress videos and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-media
+          path: |
+            cypress/videos
+            cypress/screenshots
+          if-no-files-found: ignore
