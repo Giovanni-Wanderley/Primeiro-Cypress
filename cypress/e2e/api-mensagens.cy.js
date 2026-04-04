@@ -45,21 +45,6 @@ describe("Api Adopet - login via API e uso do token", () => {
         timeout: 20000,
       });
 
-    const login = (tentativas) =>
-      cy
-        .request({
-          method: "POST",
-          url: loginUrl,
-          body: { email, password: senha },
-          failOnStatusCode: false,
-          timeout: 20000,
-        })
-        .then((res) => {
-          if (hasToken(res) || tentativas <= 0) return res;
-          cy.wait(5000);
-          return login(tentativas - 1);
-        });
-
     const cadastrar = (url) =>
       cy.request({
         method: "POST",
@@ -70,7 +55,7 @@ describe("Api Adopet - login via API e uso do token", () => {
       });
 
     warmup().then(() => {
-      login(4).then((res) => {
+      cy.loginApi(email, senha, 4, baseUrl).then((res) => {
         const notFoundEmail =
           res.status === 404 &&
           typeof res.body?.message === "string" &&
@@ -95,7 +80,7 @@ describe("Api Adopet - login via API e uso do token", () => {
                 )}`
               );
             }
-            return login(4);
+            return cy.loginApi(email, senha, 4, baseUrl);
           });
         }
 
