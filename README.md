@@ -1,5 +1,9 @@
 # Estudo Cypress
 
+[![CI - Cypress Tests](https://github.com/Giovanni-Wanderley/Primeiro-Cypress/actions/workflows/main.yml/badge.svg)](https://github.com/Giovanni-Wanderley/Primeiro-Cypress/actions/workflows/main.yml)
+![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?logo=node.js&logoColor=white)
+![Cypress](https://img.shields.io/badge/Cypress-13.17.0-69D3A7?logo=cypress&logoColor=white)
+
 Projeto de estudos com Cypress para testes end-to-end e testes de API do AdoPet.
 
 ## Objetivo
@@ -128,12 +132,26 @@ npm install
 
 Para rodar os testes locais, o arquivo [cypress.env.json](c:/Users/luiz1/Desktop/estudo_cypress/cypress.env.json) pode conter credenciais usadas nos fluxos.
 
-Exemplo:
+Exemplo minimo para fluxos de interface:
 
 ```json
 {
   "email": "emailteste@teste.com",
   "senha": "Senha1234"
+}
+```
+
+Exemplo mais completo para interface e API:
+
+```json
+{
+  "email": "emailteste@teste.com",
+  "senha": "Senha1234",
+  "ADOPET_EMAIL": "usuario_api@teste.com",
+  "ADOPET_SENHA": "Senha1234",
+  "ADOPET_NOME": "Usuario API",
+  "ADOPET_CADASTRO_URL": "https://adopet-api-i8qu.onrender.com/adotante/register",
+  "ADOPET_MENSAGEM_ID": ""
 }
 ```
 
