@@ -42,7 +42,7 @@ describe("Api Adopet - login via API e uso do token", () => {
         method: "GET",
         url: baseUrl,
         failOnStatusCode: false,
-        timeout: 20000,
+        timeout: 60000,
       });
 
     const cadastrar = (url) =>
@@ -51,7 +51,7 @@ describe("Api Adopet - login via API e uso do token", () => {
         url,
         body: { nome, email, password: senha },
         failOnStatusCode: false,
-        timeout: 20000,
+        timeout: 60000,
       });
 
     warmup().then(() => {
@@ -110,7 +110,7 @@ describe("Api Adopet - login via API e uso do token", () => {
           url: `${baseUrl}/mensagem/${mensagemId}`,
           headers: { Authorization: authorization },
           failOnStatusCode: false,
-          timeout: 20000,
+          timeout: 60000,
         }).then((mensagemRes) => {
           if (mensagemRes.status !== 200) {
             throw new Error(

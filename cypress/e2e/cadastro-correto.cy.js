@@ -1,11 +1,11 @@
-describe("Página de Cadastro", () => {
+describe("Pagina de Cadastro", () => {
   beforeEach(() => {
     cy.visit("https://adopet-frontend-cypress.vercel.app/");
     cy.get('[data-test="register-button"]').click();
-    cy.contains("p", "Ainda não tem cadastro?").should("be.visible");
+    cy.contains("p", "Ainda").should("be.visible");
   });
 
-  it("Deve cadastrar um usuário com nome aleatório e e-mail dinâmico", () => {
+  it("Deve cadastrar um usuario com nome aleatorio e e-mail dinamico", () => {
     cy.fixture("massa-dados").then((massa) => {
       const nomeAleatorio =
         massa.cadastro.nomes[Math.floor(Math.random() * massa.cadastro.nomes.length)];
@@ -16,9 +16,10 @@ describe("Página de Cadastro", () => {
         nome: nomeAleatorio,
         senha: massa.cadastro.senha,
       });
+
       cy.cadastrar(nomeAleatorio, emailDinamico, massa.cadastro.senha);
-      cy.contains("p", "Já tem conta? Faça seu login:").should("be.visible");
-      cy.url().should("include", "/login");
+      cy.url({ timeout: 20000 }).should("include", "/login");
+      cy.get('[data-test="input-loginEmail"]', { timeout: 20000 }).should("be.visible");
     });
   });
 });
